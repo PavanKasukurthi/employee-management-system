@@ -11,6 +11,10 @@ const ListEmployeeComponent = () => {
     })
   }
 
+  const addEmployee = () => {
+    
+  }
+
   useEffect(() => {
     getEmployees()
   }, [])
@@ -19,6 +23,9 @@ const ListEmployeeComponent = () => {
   return (
     <div className="container">
       <h2>Employees List</h2>
+      <div className="row">
+        <button className="btn btn-primary" onClick={addEmployee}>Add Employee</button>
+      </div>
       <div className="row">
         <table className="table table-striped table-bordered">
           <thead>
