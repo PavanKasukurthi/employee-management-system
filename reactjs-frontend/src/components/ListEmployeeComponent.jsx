@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { Link } from 'react-router-dom'
+import EmployeeService from '../services/EmployeeService'
 
 const ListEmployeeComponent = () => {
-  const EMPLOYEE_API_BASE_URL = 'http://localhost:8080/api/v1/employees'
   const [employees, setEmployees] = useState([])
 
-  const getEmployees = () => {
-    axios.get(EMPLOYEE_API_BASE_URL).then((res) => {
-      setEmployees(res.data)
-    })
-  }
-
-  const addEmployee = () => {
-    
-  }
-
   useEffect(() => {
-    getEmployees()
+    EmployeeService.getEmployees()
+      .then((res) => {
+        setEmployees(res.data)
+      })
+      .catch((err) => console.log(err))
   }, [])
   // console.log(employees)
 
@@ -24,7 +18,9 @@ const ListEmployeeComponent = () => {
     <div className="container">
       <h2>Employees List</h2>
       <div className="row">
-        <button className="btn btn-primary" onClick={addEmployee}>Add Employee</button>
+        <Link to="/add-employee" className="btn btn-primary mb-2">
+          Add Employee
+        </Link>
       </div>
       <div className="row">
         <table className="table table-striped table-bordered">

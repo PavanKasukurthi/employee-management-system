@@ -4,7 +4,7 @@ const Header = () => {
       <header>
         <nav className="navbar navbar-expand-md navbar-dark bg-dark">
           <div>
-            <a href="#" className="navbar-brand">
+            <a href="/employees" className="navbar-brand">
               Employee Management App
             </a>
           </div>
