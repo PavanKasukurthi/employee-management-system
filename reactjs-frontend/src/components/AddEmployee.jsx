@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import EmployeeService from '../services/EmployeeService'
 
 const AddEmployee = () => {
@@ -8,26 +8,49 @@ const AddEmployee = () => {
   const [emailId, setEmailId] = useState('')
   const navigate = useNavigate()
 
-  const saveEmployee = (e) => {
+  const { id } = useParams()
+
+  const saveOrUpdateEmployee = (e) => {
     e.preventDefault()
 
     const employee = { firstName, lastName, emailId }
     // console.log(employee)
 
-    EmployeeService.saveEmployee(employee)
+    if (id) {
+      EmployeeService.updateEmployee(id, employee)
+        .then((res) => {
+          console.log(res.data)
+          navigate('/employees')
+        })
+        .catch((err) => console.log(err))
+    } else {
+      EmployeeService.saveEmployee(employee)
+        .then((res) => {
+          console.log(res.data)
+          navigate('/employees')
+        })
+        .catch((err) => console.log(err))
+    }
+  }
+
+  useEffect(() => {
+    EmployeeService.getEmployeeById(id)
       .then((res) => {
-        console.log(res.data)
-        navigate('/employees')
+        setFirstName(res.data.firstName)
+        setLastName(res.data.lastName)
+        setEmailId(res.data.emailId)
       })
       .catch((err) => console.log(err))
-  }
+  }, [])
 
   return (
     <div>
       <div className="container">
         <div className="row">
           <div className="card col-md-6 offset-md-3 offset-md-3">
-            <h2 className="text-center">Add Employee</h2>
+            <h2 className="text-center">
+              {id ? 'Edit Employee' : 'Add Employee'}
+            </h2>
             <div className="card-body">
               <form action="">
                 <div className="form-group mb-2">
@@ -74,9 +97,8 @@ const AddEmployee = () => {
                 </div>
                 <button
                   className="btn btn-success"
-                  onClick={(e) => saveEmployee(e)}
+                  onClick={(e) => saveOrUpdateEmployee(e)}
                 >
-              
                   Submit
                 </button>
 

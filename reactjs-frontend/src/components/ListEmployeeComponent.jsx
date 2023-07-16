@@ -5,14 +5,28 @@ import EmployeeService from '../services/EmployeeService'
 const ListEmployeeComponent = () => {
   const [employees, setEmployees] = useState([])
 
-  useEffect(() => {
+  const getAllEmployees = () => {
     EmployeeService.getEmployees()
       .then((res) => {
         setEmployees(res.data)
       })
       .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    getAllEmployees()
   }, [])
   // console.log(employees)
+
+  const deleteEmployee = (e) => {
+    // console.log(e)
+    EmployeeService.deleteEmployee(e)
+      .then((res) => {
+        getAllEmployees()
+        console.log(e + 'deleted')
+      })
+      .catch((err) => console.log(err))
+  }
 
   return (
     <div className="container">
@@ -40,8 +54,19 @@ const ListEmployeeComponent = () => {
                   <td>{employee.lastName}</td>
                   <td>{employee.emailId}</td>
                   <td>
-                    <button className="btn btn-info">Update</button>
-                    <button className="btn btn-danger">Delete</button>
+                    <Link
+                      to={`/edit-employee/${employee.id}`}
+                      className="btn btn-info"
+                    >
+                      Update
+                    </Link>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => deleteEmployee(employee.id)}
+                      style={{ marginLeft: '1rem' }}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               )
